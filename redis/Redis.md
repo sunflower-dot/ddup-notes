@@ -33,17 +33,105 @@ Redis 与其他 key - value 缓存产品有以下三个特点：
 ## docker环境安装
 - https://cloud.tencent.com/developer/article/1670205
 
+# Redis中键的操作
+Redis 自身是一个 Map，其中所有的数据都是采用 key : value 的形式存储。
+
+数据类型指的是存储的数据的类型，也就是 value 部分的类型，key 部分永远都是字符串。
+
+![](./images/redis001.png)
+
+## 删除指定key
+
+```powershell
+del key1 key2 ...
+```
+
+返回实际删除key的数量，如果所有的key都不存在，则返回0
+
+示例：
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1039463/1585637344182-1c2f0293-7839-4f08-b4aa-9c6630a53de5.png)
+
+## 判断指定key是否存在
+
+```powershell
+exists key
+```
+
+判断key是否存在，存在返回1，不存在返回0
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1039463/1585637665778-a0213d30-51cf-406e-964f-0ddd23dfd1c0.png)
+
+## 给指定key重命名
+
+```powershell
+rename key newkey
+```
+
+作用: 给key赋一个新的key名
+
+返回：修改成功，将返回OK
+
+注:如果newkey已存在,则newkey的原值被覆盖;原来的key将不存在
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1039463/1585637802003-7cfcc123-374d-437e-b086-0472028ae2ae.png)
+
+```powershell
+renamenx key newkey  
+```
+
+作用: 把key改名为newkey
+
+返回: 发生修改返回1,未发生修改返回0
+
+注: nx--> not exists, 即, newkey不存在时,作改名动作
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1039463/1585637965961-a232bae0-a972-4368-84d2-b258b2a012a4.png)
+
+## 获取key的类型
+
+```powershell
+type key
+
+# 返回key存储的值的类型 有string,link,set,order set, hash,none(表示key不存在)
+```
+
+![img](https://cdn.nlark.com/yuque/0/2020/png/1039463/1585638213635-9ab0a195-6739-4be3-b7a8-20fab733cc2e.png)
+
+## 查询符合条件的key
+
+```powershell
+keys pattern
+```
+
+pattern：查询模式规则
+
+查询模式规则：
+
+- \* 匹配任意数量的任意符号
+- ? 配合一个任意符号
+- [] 匹配一个指定符号
+
+示例
+
+```
+key *  # 查询所有
+keys it* # 查询所有以it开头的
+keys *it # 查询所有以it结尾的
+keys ??it # 查询所有前面两个字符任意，后面以it结尾的
+keys it? # 查询所有以it开头,最后一个字符
+keys u[st]er # 查询所有以u开头,以er结尾，中间包含一个字母，s或t
+```
+
+
+
 # Redis基本数据类型
 
 参考文档：
 
 - 菜鸟教程-Redis https://www.runoob.com/redis/redis-tutorial.html
 
-Redis 自身是一个 Map，其中所有的数据都是采用 key : value 的形式存储。
 
-数据类型指的是存储的数据的类型，也就是 value 部分的类型，key 部分永远都是字符串。
-
-![](./images/redis001.png)
 
 Redis 可以存储键与 5 种不同数据结构类型之间的映射，这 5 种数据结构类型分别为 String（字符串）、List（列表）、Set（集合）、Hash（散列）和 Zset（有序集合）。
 
